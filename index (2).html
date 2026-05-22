@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>EXPO TRUCKING — Arriving Soon · Delivering Excellency Across America</title>
+<meta name="description" content="EXPO Trucking is coming soon. A next-generation freight, logistics, and dispatch platform. Talk to our AI dispatcher and get notified at launch.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syncopate:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#ff1f1f;
+    --red-deep:#cc0000;
+    --red-soft:#ff4848;
+    --red-glow:rgba(255,31,31,.55);
+    --bg-0:#070708;
+    --bg-1:#0d0d11;
+    --bg-2:#15151a;
+    --steel:#9aa0a8;
+    --ink:#f4f4f6;
+    --line:rgba(255,255,255,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow-x:hidden;scroll-behavior:smooth}
+  body{
+    font-family:'JetBrains Mono',monospace;
+    background:var(--bg-0);
+    color:var(--ink);
+    position:relative;
+    min-height:100vh;
+  }
+
+  /* ---- Atmosphere ---- */
+  .grid-bg{position:fixed;inset:0;z-index:0;
+    background:
+      radial-gradient(ellipse at 30% 10%, rgba(255,31,31,.22), transparent 55%),
+      radial-gradient(ellipse at 80% 90%, rgba(255,31,31,.12), transparent 55%),
+      linear-gradient(180deg,#06060a 0%,#0a0a0f 100%);
+    overflow:hidden;
+  }
+  .grid-bg::before{
+    content:"";position:absolute;inset:-50%;
+    background-image:
+      linear-gradient(rgba(255,31,31,.18) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,31,31,.18) 1px, transparent 1px);
+    background-size:60px 60px;
+    transform:perspective(700px) rotateX(62deg) translateY(15%);
+    animation:gridmove 9s linear infinite;
+    mask-image:linear-gradient(180deg, transparent 0%, #000 40%, #000 78%, transparent 100%);
+  }
+  @keyframes gridmove{0%{background-position:0 0}100%{background-position:0 60px,60px 0}}
+  .scan{position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px);
+    mix-blend-mode:overlay}
+  .noise{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.06;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/></svg>")}
+
+  /* ---- Live load ticker (matches site top bar) ---- */
+  .ticker{
+    position:relative;z-index:5;
+    background:var(--red-deep);
+    color:#fff;font-size:11px;letter-spacing:.2em;font-weight:700;
+    padding:8px 0;overflow:hidden;border-bottom:1px solid #000;
+  }
+  .ticker-track{display:flex;gap:50px;white-space:nowrap;animation:tick 38s linear infinite}
+  .ticker-track span{text-transform:uppercase;font-family:'JetBrains Mono',monospace}
+  .ticker-track .sep{color:rgba(255,255,255,.5);margin:0 6px}
+  .ticker-track .dot{display:inline-block;width:6px;height:6px;background:#fff;border-radius:50%;margin-right:8px;vertical-align:middle;animation:blink 1.4s infinite}
+  @keyframes tick{to{transform:translateX(-50%)}}
+  @keyframes blink{50%{opacity:.3}}
+
+  /* ---- Top status bar ---- */
+  .topbar{
+    position:relative;z-index:5;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:16px 32px;border-bottom:1px solid var(--line);
+    font-size:10px;letter-spacing:.3em;color:var(--steel);
+    text-transform:uppercase;
+    backdrop-filter:blur(6px);
+    background:rgba(8,8,10,.5);
+  }
+  .topbar .logo{
+    font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.05em;
+    color:var(--ink);display:flex;align-items:center;gap:10px;
+  }
+  .topbar .logo .x{color:var(--red);text-shadow:0 0 15px var(--red-glow)}
+  .topbar .logo small{
+    font-family:'JetBrains Mono';font-size:9px;letter-spacing:.3em;color:var(--steel);
+    border-left:1px solid var(--line);padding-left:10px;margin-left:4px;
+  }
+  .topbar .right{display:flex;gap:22px;align-items:center}
+  .topbar .right .green{color:#7dd87d}
+  .topbar .right .green::before{content:"●";margin-right:6px;animation:blink 1.4s infinite}
+
+  /* ---- Hero ---- */
+  .hero{
+    position:relative;z-index:5;
+    min-height:calc(100vh - 90px);
+    display:grid;grid-template-columns:1.15fr 1fr;
+    gap:50px;padding:70px 8vw 60px;align-items:center;
+  }
+  .badge{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:8px 14px;border:1px solid var(--red);color:var(--red);
+    font-size:10px;letter-spacing:.4em;text-transform:uppercase;border-radius:999px;
+    background:rgba(255,31,31,.06);box-shadow:0 0 30px rgba(255,31,31,.15) inset;
+    animation:fadeup .8s .1s both;font-weight:700;
+  }
+  .badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red);animation:blink 1.4s infinite}
+
+  h1.title{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(64px,11vw,180px);
+    line-height:.86;letter-spacing:-.005em;
+    margin:24px 0 14px;color:var(--ink);
+    text-shadow:0 0 60px rgba(255,31,31,.25);
+  }
+  h1.title .red{
+    color:var(--red);
+    text-shadow:0 0 25px var(--red-glow),0 0 60px rgba(255,31,31,.4);
+    display:inline-block;animation:flicker 5s infinite;
+  }
+  @keyframes flicker{0%,18%,22%,25%,53%,57%,100%{opacity:1}20%,24%,55%{opacity:.6}}
+  .title-line{display:block;overflow:hidden}
+  .title-line span{display:inline-block;animation:reveal 1s cubic-bezier(.2,.8,.2,1) both}
+  .title-line:nth-child(1) span{animation-delay:.15s}
+  .title-line:nth-child(2) span{animation-delay:.3s}
+  .title-line:nth-child(3) span{animation-delay:.45s}
+  @keyframes reveal{from{transform:translateY(105%)}to{transform:translateY(0)}}
+
+  .sub{
+    font-family:'Syncopate',sans-serif;font-weight:400;
+    color:var(--steel);font-size:12px;letter-spacing:.4em;
+    text-transform:uppercase;margin:6px 0 24px;
+    animation:fadeup .8s .55s both;
+  }
+  .sub strong{color:var(--ink);font-weight:700}
+  .sub .sep{color:var(--red);margin:0 12px}
+
+  .tagline{
+    max-width:540px;color:#c4c6cc;font-size:15px;line-height:1.75;
+    margin-bottom:36px;animation:fadeup .8s .7s both;
+  }
+  .tagline b{color:var(--ink);font-weight:500}
+
+  .ctas{display:flex;gap:14px;flex-wrap:wrap;animation:fadeup .8s .85s both}
+  .btn{
+    position:relative;padding:16px 26px;border:1px solid var(--red);
+    background:var(--red);color:#fff;font-family:'Syncopate',sans-serif;
+    font-weight:700;font-size:11px;letter-spacing:.3em;text-transform:uppercase;
+    cursor:pointer;transition:.25s ease;overflow:hidden;
+  }
+  .btn:hover{box-shadow:0 0 40px var(--red-glow);transform:translateY(-2px)}
+  .btn::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);
+    transform:translateX(-100%);transition:.7s;
+  }
+  .btn:hover::after{transform:translateX(100%)}
+  .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+  .btn.ghost:hover{border-color:var(--red);color:var(--red);box-shadow:none}
+  @keyframes fadeup{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ---- Right column ---- */
+  .right-col{position:relative;animation:fadeup 1s .4s both}
+  .stage{
+    position:relative;border:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(0,0,0,.5));
+    padding:24px;border-radius:6px;overflow:hidden;
+  }
+  .stage::before{content:"";position:absolute;top:0;left:0;height:2px;width:60%;background:var(--red);box-shadow:0 0 20px var(--red);animation:slidebar 3s ease-in-out infinite}
+  @keyframes slidebar{0%,100%{left:-40%}50%{left:80%}}
+  .stage-head{display:flex;justify-content:space-between;align-items:center;font-family:'Syncopate';font-size:9px;letter-spacing:.3em;color:var(--steel);text-transform:uppercase;margin-bottom:14px}
+  .stage-head .id{color:var(--red);font-weight:700}
+
+  /* Truck/road animation - matches their hero scene */
+  .road-scene{position:relative;height:170px;border-radius:4px;overflow:hidden;
+    background:linear-gradient(180deg,#1a0505 0%,#3a0808 35%,#000 70%);
+    border:1px solid rgba(255,31,31,.2);
+  }
+  .sun{position:absolute;top:25px;left:50%;transform:translateX(-50%);width:120px;height:60px;
+    background:radial-gradient(ellipse at center bottom,var(--red) 0%,rgba(255,31,31,.4) 40%,transparent 70%);
+    filter:blur(2px);animation:sunpulse 3s ease-in-out infinite;
+  }
+  @keyframes sunpulse{50%{opacity:.7}}
+  .mountains{position:absolute;bottom:38px;left:0;right:0;height:50px;
+    background:
+      linear-gradient(135deg, transparent 50%, #0a0a0a 50%) 0 0/50px 50px,
+      linear-gradient(45deg, transparent 50%, #0a0a0a 50%) 25px 0/50px 50px;
+  }
+  .road-strip{position:absolute;bottom:0;left:0;right:0;height:38px;background:#000;border-top:2px solid rgba(255,31,31,.4)}
+  .road-line{position:absolute;left:0;right:0;bottom:14px;height:2px;
+    background:repeating-linear-gradient(90deg,var(--red) 0 28px,transparent 28px 56px);
+    animation:roadmove .35s linear infinite;box-shadow:0 0 12px var(--red-glow);
+  }
+  @keyframes roadmove{to{transform:translateX(-56px)}}
+  .truck-svg{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);width:200px;animation:bounce .3s ease-in-out infinite alternate}
+  @keyframes bounce{to{transform:translateX(-50%) translateY(-2px)}}
+
+  /* ---- Video showcase (under truck animation) ---- */
+  .video-showcase{
+    position:relative;margin-top:14px;border-radius:4px;overflow:hidden;
+    border:1px solid rgba(255,31,31,.25);
+    background:#000;
+    box-shadow:0 0 30px rgba(255,31,31,.15) inset;
+  }
+  .video-showcase::before{
+    content:"";position:absolute;top:0;left:0;height:2px;width:50%;
+    background:var(--red);box-shadow:0 0 20px var(--red);
+    animation:slidebar 4s ease-in-out infinite;z-index:3;
+  }
+  .video-showcase video{
+    display:block;width:100%;height:auto;max-height:280px;
+    object-fit:cover;background:#000;
+    pointer-events:none; /* customer can't pause/scrub */
+  }
+  .video-label{
+    position:absolute;top:10px;left:12px;z-index:4;
+    font-family:'Syncopate',sans-serif;font-size:8px;letter-spacing:.3em;
+    color:var(--ink);text-transform:uppercase;font-weight:700;
+    background:rgba(0,0,0,.55);padding:5px 9px;border-radius:3px;
+    border-left:2px solid var(--red);backdrop-filter:blur(4px);
+  }
+  .video-label::before{
+    content:"●";color:var(--red);margin-right:6px;
+    animation:blink 1.4s infinite;
+  }
+  .mute-toggle{
+    position:absolute;bottom:10px;right:10px;z-index:4;
+    width:40px;height:40px;border-radius:50%;
+    background:rgba(0,0,0,.65);border:1px solid var(--red);
+    color:#fff;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:.25s ease;backdrop-filter:blur(4px);
+    box-shadow:0 0 18px rgba(255,31,31,.35);
+  }
+  .mute-toggle:hover{background:var(--red);transform:scale(1.08);box-shadow:0 0 25px var(--red-glow)}
+  .mute-toggle svg{width:18px;height:18px;fill:currentColor}
+  .mute-toggle .icon-on,.mute-toggle .icon-off{display:none}
+  .mute-toggle.is-muted .icon-off{display:block}
+  .mute-toggle:not(.is-muted) .icon-on{display:block}
+  .video-showcase .tap-hint{
+    position:absolute;bottom:14px;left:14px;z-index:4;
+    font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;
+    color:var(--ink);text-transform:uppercase;
+    background:rgba(255,31,31,.85);padding:6px 10px;border-radius:3px;
+    pointer-events:none;animation:pulseHint 2s ease-in-out infinite;
+    box-shadow:0 0 18px var(--red-glow);
+  }
+  .video-showcase.audio-on .tap-hint{display:none}
+  @keyframes pulseHint{50%{opacity:.55}}
+
+  .telemetry{display:flex;justify-content:space-between;margin-top:14px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--steel)}
+  .telemetry .v{color:var(--ink);font-weight:700}
+  .telemetry .live{color:#7dd87d}
+  .telemetry .live::before{content:"●";margin-right:5px;animation:blink 1.4s infinite}
+
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+  .stat{border:1px solid var(--line);padding:14px 8px;text-align:center;background:rgba(255,31,31,.04);position:relative;overflow:hidden}
+  .stat .n{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--red);line-height:1;text-shadow:0 0 15px var(--red-glow)}
+  .stat .l{font-size:8px;letter-spacing:.25em;color:var(--steel);margin-top:6px;text-transform:uppercase;font-weight:700}
+
+  /* ---- Marquee strip ---- */
+  .strip{position:relative;z-index:5;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;overflow:hidden;background:rgba(0,0,0,.5)}
+  .marquee{display:flex;gap:60px;white-space:nowrap;animation:slide 35s linear infinite}
+  .marquee span{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.15em;color:var(--steel)}
+  .marquee span::before{content:"◆ ";color:var(--red)}
+  @keyframes slide{to{transform:translateX(-50%)}}
+
+  /* ---- Quick info row ---- */
+  .info-row{
+    position:relative;z-index:5;display:grid;grid-template-columns:repeat(3,1fr);
+    gap:0;padding:0 8vw;border-bottom:1px solid var(--line);
+  }
+  .info-cell{padding:30px 24px;border-right:1px solid var(--line);}
+  .info-cell:last-child{border-right:none}
+  .info-cell .lbl{font-family:'Syncopate';font-size:9px;letter-spacing:.35em;color:var(--red);text-transform:uppercase;margin-bottom:10px;font-weight:700}
+  .info-cell .val{font-family:'Bebas Neue';font-size:24px;letter-spacing:.05em;color:var(--ink)}
+  .info-cell .sub{font-size:11px;color:var(--steel);letter-spacing:.1em;margin-top:4px}
+
+  /* ---- Chat widget ---- */
+  .chat-fab{
+    position:fixed;bottom:24px;right:24px;z-index:60;
+    width:64px;height:64px;border-radius:50%;background:var(--red);border:none;cursor:pointer;
+    box-shadow:0 8px 30px var(--red-glow);animation:pulse 2s infinite;
+    display:flex;align-items:center;justify-content:center;transition:.3s;
+  }
+  .chat-fab:hover{transform:scale(1.08)}
+  .chat-fab svg{width:30px;height:30px;fill:#fff}
+  .chat-fab .tip{
+    position:absolute;right:75px;top:50%;transform:translateY(-50%);
+    background:var(--bg-2);color:var(--ink);padding:8px 12px;border-radius:4px;
+    font-size:10px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;
+    border:1px solid var(--red);box-shadow:0 4px 20px rgba(0,0,0,.4);
+    opacity:0;pointer-events:none;transition:.3s;font-family:'Syncopate';font-weight:700;
+  }
+  .chat-fab:hover .tip{opacity:1;right:80px}
+  @keyframes pulse{
+    0%{box-shadow:0 8px 30px var(--red-glow),0 0 0 0 rgba(255,31,31,.6)}
+    70%{box-shadow:0 8px 30px var(--red-glow),0 0 0 20px rgba(255,31,31,0)}
+    100%{box-shadow:0 8px 30px var(--red-glow),0 0 0 0 rgba(255,31,31,0)}
+  }
+
+  .chat-panel{
+    position:fixed;bottom:100px;right:24px;z-index:60;
+    width:400px;max-width:calc(100vw - 32px);height:580px;max-height:calc(100vh - 140px);
+    background:linear-gradient(180deg,#0e0e12,#15151a);
+    border:1px solid var(--red);border-radius:8px;
+    display:none;flex-direction:column;overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 40px rgba(255,31,31,.25);
+    animation:chatin .35s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes chatin{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+  .chat-panel.open{display:flex}
+  .chat-head{padding:16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;background:rgba(255,31,31,.08)}
+  .chat-head .avatar{width:38px;height:38px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue';font-size:18px;color:#fff;box-shadow:0 0 15px var(--red-glow)}
+  .chat-head .info{flex:1}
+  .chat-head .name{font-family:'Syncopate';font-weight:700;font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--ink)}
+  .chat-head .status{font-size:9px;color:#7dd87d;letter-spacing:.2em;text-transform:uppercase;margin-top:2px}
+  .chat-head .status::before{content:"●";margin-right:5px;animation:blink 1.5s infinite}
+  .chat-head .close{background:none;border:none;color:var(--steel);cursor:pointer;font-size:20px;padding:4px 8px}
+  .chat-head .close:hover{color:var(--red)}
+
+  .chat-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+  .chat-body::-webkit-scrollbar{width:6px}
+  .chat-body::-webkit-scrollbar-track{background:transparent}
+  .chat-body::-webkit-scrollbar-thumb{background:var(--red);border-radius:3px}
+  .msg{max-width:82%;padding:11px 14px;border-radius:8px;font-size:13px;line-height:1.55;animation:fadeup .3s both;word-wrap:break-word}
+  .msg.bot{background:rgba(255,255,255,.05);border:1px solid var(--line);align-self:flex-start;border-left:2px solid var(--red);color:#e4e4e8}
+  .msg.user{background:var(--red);color:#fff;align-self:flex-end}
+  .typing{align-self:flex-start;display:flex;gap:4px;padding:14px;background:rgba(255,255,255,.05);border-radius:8px;border-left:2px solid var(--red)}
+  .typing span{width:6px;height:6px;border-radius:50%;background:var(--red);animation:typebounce 1.2s infinite}
+  .typing span:nth-child(2){animation-delay:.15s}
+  .typing span:nth-child(3){animation-delay:.3s}
+  @keyframes typebounce{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-6px);opacity:1}}
+
+  .quick-replies{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px}
+  .quick-replies button{background:transparent;border:1px solid var(--line);color:var(--steel);padding:6px 10px;font-size:10px;border-radius:999px;cursor:pointer;font-family:'JetBrains Mono';transition:.2s}
+  .quick-replies button:hover{border-color:var(--red);color:var(--red)}
+
+  .chat-foot{padding:12px;border-top:1px solid var(--line);display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.4)}
+  .chat-foot input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--ink);padding:11px 12px;border-radius:4px;font-family:inherit;font-size:13px;outline:none;transition:.2s}
+  .chat-foot input:focus{border-color:var(--red);background:rgba(255,31,31,.05)}
+  .chat-foot button.send{background:var(--red);border:none;color:#fff;padding:11px 16px;border-radius:4px;cursor:pointer;font-family:'Syncopate';font-size:10px;letter-spacing:.2em;font-weight:700}
+  .chat-foot button.send:hover{box-shadow:0 0 20px var(--red-glow)}
+  .mic-btn{background:transparent;border:1px solid var(--line);color:var(--steel);width:42px;height:42px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+  .mic-btn:hover{border-color:var(--red);color:var(--red)}
+  .mic-btn.listening{background:var(--red);color:#fff;border-color:var(--red);animation:pulse 1.2s infinite}
+  .mic-btn svg{width:16px;height:16px;fill:currentColor}
+
+  footer{position:relative;z-index:5;padding:30px 8vw;border-top:1px solid var(--line);text-align:center;font-size:10px;letter-spacing:.3em;color:var(--steel);text-transform:uppercase}
+  footer .red{color:var(--red);font-weight:700}
+  footer .phone{color:var(--ink);margin:0 8px}
+
+  /* Notify modal */
+  .modal{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+  .modal.open{display:flex}
+  .modal-box{background:linear-gradient(180deg,#0e0e12,#15151a);border:1px solid var(--red);border-radius:8px;padding:36px;max-width:440px;width:90%;text-align:center;box-shadow:0 0 60px var(--red-glow);animation:chatin .35s}
+  .modal-box h3{font-family:'Bebas Neue';font-size:42px;color:var(--ink);letter-spacing:.02em;margin-bottom:8px}
+  .modal-box h3 .red{color:var(--red)}
+  .modal-box p{font-size:13px;color:var(--steel);line-height:1.6;margin-bottom:22px}
+  .modal-box input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--ink);padding:13px;border-radius:4px;font-family:inherit;font-size:13px;outline:none;margin-bottom:12px}
+  .modal-box input:focus{border-color:var(--red)}
+  .modal-box .row{display:flex;gap:10px;margin-top:8px}
+  .modal-box .row .btn{flex:1}
+
+  @media(max-width:900px){
+    .hero{grid-template-columns:1fr;padding:50px 6vw;gap:35px}
+    .topbar{padding:14px 18px;flex-wrap:wrap;gap:10px}
+    .topbar .right{gap:14px;font-size:9px}
+    .info-row{grid-template-columns:1fr}
+    .info-cell{border-right:none;border-bottom:1px solid var(--line)}
+    .chat-panel{width:calc(100vw - 24px);right:12px;bottom:90px;height:calc(100vh - 110px)}
+    .chat-fab{right:16px;bottom:16px}
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="scan"></div>
+<div class="noise"></div>
+
+<!-- Live load ticker (matches their site) -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span><span class="dot"></span>ATLANTA, GA → DALLAS, TX</span><span class="sep">·</span>
+    <span>LOAD #EXP-4472</span><span class="sep">·</span>
+    <span>ETA 14:32</span><span class="sep">·</span>
+    <span>ON TIME</span><span class="sep">◆</span>
+    <span>HOUSTON, TX → MEMPHIS, TN</span><span class="sep">·</span>
+    <span>LOAD #EXP-4475</span><span class="sep">·</span>
+    <span>ON ROUTE</span><span class="sep">◆</span>
+    <span>LAREDO, TX → CHICAGO, IL</span><span class="sep">·</span>
+    <span>LOAD #EXP-4481</span><span class="sep">·</span>
+    <span>ETA 22:46</span><span class="sep">◆</span>
+    <span>PHOENIX, AZ → DALLAS, TX</span><span class="sep">·</span>
+    <span>LOAD #EXP-4476</span><span class="sep">·</span>
+    <span>ETA 04:50</span><span class="sep">·</span>
+    <span>ON TIME</span><span class="sep">◆</span>
+    <!-- duplicate for seamless loop -->
+    <span><span class="dot"></span>ATLANTA, GA → DALLAS, TX</span><span class="sep">·</span>
+    <span>LOAD #EXP-4472</span><span class="sep">·</span>
+    <span>ETA 14:32</span><span class="sep">·</span>
+    <span>ON TIME</span><span class="sep">◆</span>
+    <span>HOUSTON, TX → MEMPHIS, TN</span><span class="sep">·</span>
+    <span>LOAD #EXP-4475</span><span class="sep">·</span>
+    <span>ON ROUTE</span><span class="sep">◆</span>
+    <span>LAREDO, TX → CHICAGO, IL</span><span class="sep">·</span>
+    <span>LOAD #EXP-4481</span><span class="sep">·</span>
+    <span>ETA 22:46</span><span class="sep">◆</span>
+    <span>PHOENIX, AZ → DALLAS, TX</span><span class="sep">·</span>
+    <span>LOAD #EXP-4476</span><span class="sep">·</span>
+    <span>ETA 04:50</span><span class="sep">·</span>
+    <span>ON TIME</span><span class="sep">◆</span>
+  </div>
+</div>
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="logo">E<span class="x">X</span>PO <small>TRUCKING · DALLAS, TX</small></div>
+  <div class="right">
+    <span class="green">SYSTEM ONLINE</span>
+    <span>EST. 2026</span>
+    <span class="phone">(469) 403-9499</span>
+  </div>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="left-col">
+    <div class="badge">◢ Site Launching Soon · Phase 01</div>
+
+    <h1 class="title">
+      <span class="title-line"><span>DELIVERING</span></span>
+      <span class="title-line"><span class="red">EXCELLENCY /</span></span>
+      <span class="title-line"><span>ACROSS AMERICA.</span></span>
+    </h1>
+
+    <div class="sub">Freight <span class="sep">/</span> Logistics <span class="sep">/</span> <strong>Dispatch</strong></div>
+
+    <p class="tagline">
+      <b>We're polishing the rig before we hit the road.</b> EXPO Trucking pairs dedicated capacity, real-time visibility, and a hand-picked driver network into one ruthlessly reliable freight engine — coast to coast, on time, every time. Our full site is rolling out shortly. In the meantime, talk to our AI dispatcher below — it knows what we're building.
+    </p>
+
+    <div class="ctas">
+      <button class="btn" onclick="openChat()">◢ TALK TO AI DISPATCH</button>
+      <button class="btn ghost" onclick="openModal()">NOTIFY ME AT LAUNCH</button>
+    </div>
+  </div>
+
+  <div class="right-col">
+    <div class="stage">
+      <div class="stage-head">
+        <span>⏵ LIVE FEED · ROUTE EXP-4472</span>
+        <span class="id">71 MPH</span>
+      </div>
+
+      <div class="road-scene">
+        <div class="sun"></div>
+        <div class="mountains"></div>
+        <div class="road-strip"></div>
+        <div class="road-line"></div>
+
+        <svg class="truck-svg" viewBox="0 0 220 80" xmlns="http://www.w3.org/2000/svg">
+          <!-- trailer -->
+          <rect x="2" y="14" width="135" height="42" fill="#f4f4f6" stroke="#000" stroke-width="1"/>
+          <rect x="6" y="18" width="127" height="34" fill="none" stroke="#222" stroke-width=".5"/>
+          <text x="50" y="38" font-family="Bebas Neue" font-size="14" fill="#ff1f1f" font-weight="700">EXPO</text>
+          <text x="50" y="50" font-family="Syncopate" font-size="5" fill="#222" font-weight="700">TRACKING</text>
+          <!-- decorative red stripe on trailer -->
+          <rect x="2" y="52" width="135" height="4" fill="#ff1f1f"/>
+          <!-- cab -->
+          <path d="M137 22 L168 22 L184 35 L184 56 L137 56 Z" fill="#ff1f1f"/>
+          <rect x="146" y="26" width="22" height="14" fill="#0d0d10" opacity=".9"/>
+          <rect x="170" y="38" width="10" height="8" fill="#ffeb3b" opacity=".95"/>
+          <!-- wheels -->
+          <circle cx="25" cy="61" r="8" fill="#0d0d10"/>
+          <circle cx="25" cy="61" r="3" fill="#ff1f1f"/>
+          <circle cx="55" cy="61" r="8" fill="#0d0d10"/>
+          <circle cx="55" cy="61" r="3" fill="#ff1f1f"/>
+          <circle cx="105" cy="61" r="8" fill="#0d0d10"/>
+          <circle cx="105" cy="61" r="3" fill="#ff1f1f"/>
+          <circle cx="150" cy="61" r="8" fill="#0d0d10"/>
+          <circle cx="150" cy="61" r="3" fill="#ff1f1f"/>
+          <circle cx="172" cy="61" r="8" fill="#0d0d10"/>
+          <circle cx="172" cy="61" r="3" fill="#ff1f1f"/>
+        </svg>
+      </div>
+
+      <!-- ===== EXPO Truck Video — autoplay, looped, no pause control ===== -->
+      <div class="video-showcase" id="videoShowcase">
+        <div class="video-label">Live Reel · Built To Haul</div>
+        <video
+          id="expoTruckVideo"
+          src="https://res.cloudinary.com/dyuprxymq/video/upload/expo-truck-video_1_j7fcju.mp4"
+          autoplay
+          loop
+          muted
+          playsinline
+          preload="auto"
+          disablepictureinpicture
+          controlslist="nodownload noplaybackrate nofullscreen"
+        ></video>
+        <div class="tap-hint">◢ Tap speaker for sound</div>
+        <button class="mute-toggle is-muted" id="muteToggle" onclick="toggleVideoSound()" aria-label="Toggle sound" title="Toggle sound">
+          <svg class="icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.59 3L20 8.41 18.59 7 15 10.59 11.41 7 10 8.41 13.59 12 10 15.59 11.41 17 15 13.41 18.59 17 20 15.59 16.59 12z"/></svg>
+          <svg class="icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+        </button>
+      </div>
+
+      <div class="telemetry">
+        <span>I-20 EAST</span>
+        <span class="live">LIVE</span>
+        <span class="v">14:32</span>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat"><div class="n">247</div><div class="l">Active Units</div></div>
+        <div class="stat"><div class="n">48</div><div class="l">States</div></div>
+        <div class="stat"><div class="n">99<small style="font-size:18px">.7%</small></div><div class="l">On-Time</div></div>
+        <div class="stat"><div class="n">24/7</div><div class="l">Dispatch</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Quick info row -->
+<div class="info-row">
+  <div class="info-cell">
+    <div class="lbl">◢ Coverage</div>
+    <div class="val">48 STATES · COAST TO COAST</div>
+    <div class="sub">Dedicated, brokerage & 3PL — built around your supply chain.</div>
+  </div>
+  <div class="info-cell">
+    <div class="lbl">◢ Dispatch</div>
+    <div class="val">24/7 · LIVE OPERATORS</div>
+    <div class="sub">Real humans on the line. Every shift. Every weekend.</div>
+  </div>
+  <div class="info-cell">
+    <div class="lbl">◢ Contact</div>
+    <div class="val">(469) 403-9499</div>
+    <div class="sub">3014 Forest Ln, Suite 200 · Dallas, TX 75234</div>
+  </div>
+</div>
+
+<!-- Marquee -->
+<div class="strip">
+  <div class="marquee">
+    <span>RELIABLE</span><span>ON TIME</span><span>EVERY TIME</span><span>EXPO TRUCKING</span><span>FREIGHT FORWARDING</span><span>LIVE DISPATCH</span><span>NATIONWIDE COVERAGE</span><span>AI ROUTING</span><span>BUILT TO HAUL</span>
+    <span>RELIABLE</span><span>ON TIME</span><span>EVERY TIME</span><span>EXPO TRUCKING</span><span>FREIGHT FORWARDING</span><span>LIVE DISPATCH</span><span>NATIONWIDE COVERAGE</span><span>AI ROUTING</span><span>BUILT TO HAUL</span>
+  </div>
+</div>
+
+<footer>
+  © 2026 EXPO TRUCKING <span class="phone">· (469) 403-9499 ·</span> <span class="red">ROLLING SOON</span>
+</footer>
+
+<!-- ===== Chat Widget ===== -->
+<button class="chat-fab" onclick="toggleChat()" aria-label="Open AI Dispatcher">
+  <span class="tip">Talk to Dispatch</span>
+  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 2.52 1.17 4.79 3.06 6.43L4 22l5.07-1.97c.92.31 1.91.47 2.93.47 5.52 0 10-4.04 10-9S17.52 2 12 2z"/></svg>
+</button>
+
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-head">
+    <div class="avatar">EX</div>
+    <div class="info">
+      <div class="name">Expo AI Dispatch</div>
+      <div class="status">Online · Voice Enabled</div>
+    </div>
+    <button class="close" onclick="toggleChat()" aria-label="Close">✕</button>
+  </div>
+  <div class="chat-body" id="chatBody">
+    <div class="msg bot">Hey — I'm <b>Expo's AI Dispatcher</b>. The site's still pulling onto the lot, but ask me anything about what we're building. You can type or tap the mic to talk to me. 🚛</div>
+  </div>
+  <div class="quick-replies">
+    <button onclick="quickAsk('When does Expo Trucking launch?')">When do you launch?</button>
+    <button onclick="quickAsk('What services do you offer?')">Services</button>
+    <button onclick="quickAsk('Do you cover my area?')">Coverage</button>
+    <button onclick="quickAsk('How do I get a quote?')">Get a quote</button>
+    <button onclick="quickAsk('I want to drive for Expo')">Drive for Expo</button>
+  </div>
+  <div class="chat-foot">
+    <button class="mic-btn" id="micBtn" onclick="toggleMic()" aria-label="Voice input" title="Tap to talk">
+      <svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 003-3V5a3 3 0 00-6 0v6a3 3 0 003 3zm5-3a5 5 0 01-10 0H5a7 7 0 006 6.92V21h2v-3.08A7 7 0 0019 11h-2z"/></svg>
+    </button>
+    <input id="chatInput" placeholder="Ask Expo Dispatch anything..." onkeydown="if(event.key==='Enter')sendMsg()" />
+    <button class="send" onclick="sendMsg()">SEND</button>
+  </div>
+</div>
+
+<!-- Notify Modal -->
+<div class="modal" id="notifyModal">
+  <div class="modal-box">
+    <h3>ROLLING <span class="red">SOON</span></h3>
+    <p>Drop your email — we'll ping you the second EXPO Trucking goes live. No spam, just the launch signal.</p>
+    <input type="email" id="notifyEmail" placeholder="your@email.com" />
+    <div class="row">
+      <button class="btn ghost" onclick="closeModal()">CANCEL</button>
+      <button class="btn" onclick="submitNotify()">NOTIFY ME</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------- Chat logic ----------
+  const chatPanel = document.getElementById('chatPanel');
+  const chatBody  = document.getElementById('chatBody');
+  const chatInput = document.getElementById('chatInput');
+  const micBtn    = document.getElementById('micBtn');
+
+  // ---------- Truck video sound toggle ----------
+  // Video autoplays muted + looped. Customer can ONLY toggle audio — no pause, no scrub.
+  const expoVideo     = document.getElementById('expoTruckVideo');
+  const muteToggle    = document.getElementById('muteToggle');
+  const videoShowcase = document.getElementById('videoShowcase');
+
+  function toggleVideoSound(){
+    if(!expoVideo) return;
+    expoVideo.muted = !expoVideo.muted;
+    muteToggle.classList.toggle('is-muted', expoVideo.muted);
+    videoShowcase.classList.toggle('audio-on', !expoVideo.muted);
+    // If somehow the video paused, kick it back into play (no user pause allowed)
+    if(expoVideo.paused) expoVideo.play().catch(()=>{});
+  }
+  // Keep the loop bulletproof — if browser pauses for any reason, restart it
+  if(expoVideo){
+    expoVideo.addEventListener('pause', ()=>{ expoVideo.play().catch(()=>{}); });
+    expoVideo.addEventListener('ended', ()=>{ expoVideo.currentTime = 0; expoVideo.play().catch(()=>{}); });
+  }
+
+  function toggleChat(){ chatPanel.classList.toggle('open'); if(chatPanel.classList.contains('open')) setTimeout(()=>chatInput.focus(),300); }
+  function openChat(){ chatPanel.classList.add('open'); setTimeout(()=>chatInput.focus(),300); }
+
+  function appendMsg(text, who){
+    const div = document.createElement('div');
+    div.className = 'msg ' + who;
+    div.innerHTML = text;
+    chatBody.appendChild(div);
+    chatBody.scrollTop = chatBody.scrollHeight;
+    return div;
+  }
+  function showTyping(){
+    const t = document.createElement('div');
+    t.className='typing';
+    t.id='typingIndicator';
+    t.innerHTML='<span></span><span></span><span></span>';
+    chatBody.appendChild(t);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+  function hideTyping(){ const t=document.getElementById('typingIndicator'); if(t) t.remove(); }
+
+  function quickAsk(q){ chatInput.value=q; sendMsg(); }
+
+  // System prompt giving the bot Expo-specific knowledge
+  const SYSTEM_PROMPT = `You are the AI Dispatcher for EXPO Trucking — a freight, logistics, and dispatch company based in Dallas, Texas. The full website is launching SOON (this is a coming-soon page). Be friendly, sharp, and brief. Use trucker/dispatcher energy (confident, no-nonsense, occasional truck emoji 🚛). Keep replies under 4 short sentences unless the user asks for detail.
+
+KEY FACTS:
+- Tagline: "Delivering Excellency Across America"
+- Location: 3014 Forest Ln, Suite 200, Dallas, TX 75234
+- Phone: (469) 403-9499
+- Hours: 8:00 AM – 8:00 PM CST · Dispatch 24/7
+- Fleet: 247 active units · 48 states covered · 99.7% on-time delivery
+- Services: (1) Asset-Based Dedicated Transport — own fleet, own drivers, dedicated lanes, no broker games. (2) Freight Brokerage — vetted carrier network, matched intelligently with full GPS/ELD transparency. (3) 3PL Solutions — warehousing, distribution oversight, inventory & value-add services.
+- Tech: real-time GPS tracking, predictive ETAs, proof-of-delivery, ELD-compliant fleet.
+- Hiring: We hire drivers (modern trucks, fair pay, home time that respects family) and office staff (dispatchers, logisticians, mechanics).
+- For quotes or to get on the launch list, tell users to call (469) 403-9499 or hit "Notify Me At Launch" on this page.
+
+IMPORTANT: If asked exactly when the site launches, say "very soon — drop your email on the Notify Me button and we'll signal you the moment we roll out." Do NOT invent a specific date. If asked something you genuinely don't know, suggest calling dispatch at (469) 403-9499.`;
+
+  const conversation = [];
+
+  async function sendMsg(){
+    const text = chatInput.value.trim();
+    if(!text) return;
+    appendMsg(text, 'user');
+    chatInput.value='';
+    showTyping();
+
+    conversation.push({role:'user', content:text});
+
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          model:'claude-sonnet-4-20250514',
+          max_tokens:400,
+          system: SYSTEM_PROMPT,
+          messages: conversation
+        })
+      });
+      const data = await res.json();
+      const reply = (data.content || [])
+        .filter(b => b.type === 'text')
+        .map(b => b.text).join('\n').trim() || "Sorry — dispatch line is fuzzy. Try again or call (469) 403-9499.";
+
+      hideTyping();
+      appendMsg(reply.replace(/\n/g,'<br>'), 'bot');
+      conversation.push({role:'assistant', content:reply});
+
+      // Speak it
+      if(window.speechSynthesis){
+        const u = new SpeechSynthesisUtterance(reply.replace(/<[^>]+>/g,'').slice(0,300));
+        u.rate = 1.02; u.pitch = .95;
+        const voices = window.speechSynthesis.getVoices();
+        const v = voices.find(v=>/male|david|daniel|alex/i.test(v.name)) || voices[0];
+        if(v) u.voice = v;
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(u);
+      }
+    } catch(e){
+      hideTyping();
+      appendMsg("Dispatch line had a glitch. Try again, or call us at <b>(469) 403-9499</b> 🚛", 'bot');
+    }
+  }
+
+  // ---------- Voice input ----------
+  let recognition, listening=false;
+  if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SR();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+    recognition.onresult = (e)=>{
+      chatInput.value = e.results[0][0].transcript;
+      sendMsg();
+    };
+    recognition.onend = ()=>{ listening=false; micBtn.classList.remove('listening'); };
+    recognition.onerror = ()=>{ listening=false; micBtn.classList.remove('listening'); };
+  }
+  function toggleMic(){
+    if(!recognition){
+      appendMsg("Voice isn't supported in this browser — try Chrome or Edge. You can still type! 🎤", 'bot');
+      return;
+    }
+    if(listening){ recognition.stop(); listening=false; micBtn.classList.remove('listening'); }
+    else { recognition.start(); listening=true; micBtn.classList.add('listening'); }
+  }
+
+  // ---------- Notify modal ----------
+  const modal = document.getElementById('notifyModal');
+  function openModal(){ modal.classList.add('open'); setTimeout(()=>document.getElementById('notifyEmail').focus(),200); }
+  function closeModal(){ modal.classList.remove('open'); }
+  function submitNotify(){
+    const email = document.getElementById('notifyEmail').value.trim();
+    if(!email || !/.+@.+\..+/.test(email)){
+      document.getElementById('notifyEmail').style.borderColor = '#ff1f1f';
+      return;
+    }
+    closeModal();
+    setTimeout(()=>{
+      openChat();
+      appendMsg(`Got it — <b>${email}</b> is on the launch list. We'll signal you the second EXPO rolls out. 🚛`, 'bot');
+    }, 300);
+  }
+
+  // Preload voices for some browsers
+  if(window.speechSynthesis){ window.speechSynthesis.getVoices(); window.speechSynthesis.onvoiceschanged = ()=>window.speechSynthesis.getVoices(); }
+</script>
+
+</body>
+</html>
